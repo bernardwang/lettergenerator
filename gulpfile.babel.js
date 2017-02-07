@@ -230,7 +230,8 @@ gulp.task('dev', ['pages', 'styles','watch-scripts', 'assets', 'watcher', 'brows
 /**
  *	dist - prod build
  */
-gulp.task('prod', ['pages', 'min-styles', 'lint-scripts', 'min-scripts', 'assets']);
+//gulp.task('prod', ['pages', 'min-styles', 'lint-scripts', 'min-scripts', 'assets']);
+gulp.task('prod', ['pages', 'min-styles', 'min-scripts', 'assets']);
 
 /**
  *	clean - deletes dist folder
