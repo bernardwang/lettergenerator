@@ -193,7 +193,7 @@ gulp.task('min-scripts', ['scripts'], () => {
  *	Move assets
  */
 gulp.task('assets', () => {
-	gulp.src(SRC_ASSETS)
+	gulp.src([SRC_ASSETS, '!'+SRC_HTML, '!'+SRC_SASS, '!'+SRC_JS])
 		.pipe(changed(DEST_ASSETS))
 		.pipe(gulp.dest(DEST_ASSETS))
 		.pipe(sync.reload(syncOpts));
