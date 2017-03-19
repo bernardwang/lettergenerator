@@ -9,24 +9,33 @@ const styles = [
 ]
 const maxlen = 80;
 
-const getImage = function(apiURL) {
+const getImage = function(apiURL, index) {
 	let promise = Promise.resolve( 
 		$.getJSON('http://anyorigin.com/go?url=' + encodeURIComponent(apiURL) + '&callback=?', (data) => {
-			let html = document.createElement('html');
-			html.innerHTML = data.contents;
+			let el = document.createElement('html');
+			el.innerHTML = data.contents;
 
-			let imgSrc = $('img', html)[6].src;
+			let imgSrc = $('img', el)[6];
 			if (imgSrc) {
+				imgSrc = imgSrc.src;
 				let img = $('<img />', { 
-					id: '',
+					id: 'text'+index,
+					class: 'text',
 					src: imgSrc,
 					alt: ''
 				});
 				img.appendTo($('#js-main'));
+			} else {
+				console.log('Image not parsed');
 			}
 		})
 	);
 	return promise;
+}
+
+const reorderImages = function() {
+	let images = document.getElementsByClassName('text');
+	console.log('Reorder');
 }
 
 const generate = function(e) {
@@ -58,17 +67,17 @@ const generate = function(e) {
 			text = '';
 		}
 
-		apiURL = url1 + subtext + url2;
+		apiURL = url1 + encodeURI(subtext) + url2;
 		apiURLs.push(apiURL);
 	}
 
-	const apiPromises = apiURLs.map((apiURL) => {
-		return getImage(apiURL);
+	const apiPromises = apiURLs.map((apiURL, i) => {
+		return getImage(apiURL, i);
 	});
 
 	return Promise.all(apiPromises)
+		.then(() => reorderImages())
 		.then(() => {
-			console.log("all done");
 		});
 }
 
