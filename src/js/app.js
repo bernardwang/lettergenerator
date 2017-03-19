@@ -12,23 +12,18 @@ const maxlen = 80;
 const getImage = function(apiURL) {
 	let promise = Promise.resolve( 
 		$.getJSON('http://anyorigin.com/go?url=' + encodeURIComponent(apiURL) + '&callback=?', (data) => {
-			let el = document.createElement('html');
-			el.innerHTML = data.contents;
-	
-			let imgs = $.map($('img', el), (val, i) => {
-				if (i > 5) return val.src;
-				else return;
-			});
-	
-			$.map(imgs, (val, i) => {
-				let img = $('<img>');
-				img = $('<img />', { 
+			let html = document.createElement('html');
+			html.innerHTML = data.contents;
+
+			let imgSrc = $('img', html)[6].src;
+			if (imgSrc) {
+				let img = $('<img />', { 
 					id: '',
-					src: val,
+					src: imgSrc,
 					alt: ''
 				});
 				img.appendTo($('#js-main'));
-			});
+			}
 		})
 	);
 	return promise;
