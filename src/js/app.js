@@ -9,17 +9,17 @@ const styles = [
 ]
 const maxlen = 80;
 
-const getImage = function(apiURL, index) {
+const getImage = function(apiURL) {
 	let promise = Promise.resolve( 
 		$.getJSON('http://anyorigin.com/go?url=' + encodeURIComponent(apiURL) + '&callback=?', (data) => {
 			let el = document.createElement('html');
 			el.innerHTML = data.contents;
-
+			
 			let imgSrc = $('img', el)[6];
 			if (imgSrc) {
 				imgSrc = imgSrc.src;
 				let img = $('<img />', { 
-					id: 'text'+index,
+					id: 'text',
 					class: 'text',
 					src: imgSrc,
 					alt: ''
@@ -34,8 +34,6 @@ const getImage = function(apiURL, index) {
 }
 
 const reorderImages = function() {
-	let images = document.getElementsByClassName('text');
-	console.log('Reorder');
 }
 
 const generate = function(e) {
@@ -71,14 +69,12 @@ const generate = function(e) {
 		apiURLs.push(apiURL);
 	}
 
-	const apiPromises = apiURLs.map((apiURL, i) => {
-		return getImage(apiURL, i);
-	});
-
-	return Promise.all(apiPromises)
-		.then(() => reorderImages())
-		.then(() => {
-		});
+	for (let i = 0; i < apiURLs.length; i++) {
+		let delay = 1000;
+		setTimeout(() => {
+			getImage(apiURLs[i]);
+		}, i * delay)
+	}
 }
 
 global.app = function () {
